@@ -174,11 +174,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // Handle 401 Unauthorized errors
         if (error.response?.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            // Only redirect if not already on login page
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login';
             }
@@ -295,6 +293,13 @@ export const adminService = {
     
     deleteTeacher: async (id) => {
         const response = await api.delete(`/admin/teachers/${id}`);
+        return response.data;
+    },
+    
+    getTeacherPDF: async (id) => {
+        const response = await api.get(`/admin/teachers/${id}/pdf`, {
+            responseType: 'blob'
+        });
         return response.data;
     },
     
